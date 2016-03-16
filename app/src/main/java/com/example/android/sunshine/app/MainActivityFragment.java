@@ -18,7 +18,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 /**
  * A placeholder fragment containing a simple view.
  */
@@ -30,7 +29,7 @@ public class MainActivityFragment extends Fragment {
     private static final int FORECAST_DAYS = 7;
 
     //Instance variables
-    private String httpApiCall = "api.openweathermap.org/data/2.5/forecast/daily?zip=" + CITY_ZIP.toString() + "&mode=json&units=metric&cnt=" + Integer.toString(FORECAST_DAYS) + "&appid=" + API_KEY.toString();
+    private String httpApiCall = "http://api.openweathermap.org/data/2.5/forecast/daily?zip=" + CITY_ZIP + "&mode=json&units=metric&cnt=" + Integer.toString(FORECAST_DAYS) + "&appid=" + API_KEY;
 
     public MainActivityFragment() {
     }
@@ -50,9 +49,9 @@ public class MainActivityFragment extends Fragment {
                 "Sun - Sunny - 90/60"
         };
 
-        List<String> forecast = new ArrayList<String>(Arrays.asList(forecastArray));
+        List<String> forecast = new ArrayList<>(Arrays.asList(forecastArray));
 
-        ArrayAdapter<String> mForecastAdapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item_forecast, R.id.list_item_forecast_textview, forecast);
+        ArrayAdapter<String> mForecastAdapter = new ArrayAdapter<>(getActivity(), R.layout.list_item_forecast, R.id.list_item_forecast_textview, forecast);
 
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
@@ -67,12 +66,13 @@ public class MainActivityFragment extends Fragment {
         // Will contain the raw JSON response as a string.
         String forecastJsonStr = null;
 
+
         try {
             // Construct the URL for the OpenWeatherMap query
             // Possible parameters are avaiable at OWM's forecast API page, at
             // http://openweathermap.org/API#forecast
 
-            URL url = new URL(httpApiCall.toString());
+            URL url = new URL(httpApiCall);
 
             // Create the request to OpenWeatherMap, and open the connection
             urlConnection = (HttpURLConnection) url.openConnection();
