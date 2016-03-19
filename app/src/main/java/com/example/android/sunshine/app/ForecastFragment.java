@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -31,11 +34,37 @@ public class ForecastFragment extends Fragment {
     private static final int FORECAST_DAYS = 7;
 
     //Instance variables
+    private ArrayAdapter<String> mForecastAdapter;
     private String httpApiCall = "http://api.openweathermap.org/data/2.5/forecast/daily?zip=" + CITY_ZIP + "&mode=json&units=metric&cnt=" + Integer.toString(FORECAST_DAYS) + "&appid=" + API_KEY;
 
     private URL url;
 
     public ForecastFragment() {
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // Add this line in order for this fragment to handle menu events.
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.forecastfragment, menu);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_refresh) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -47,7 +76,7 @@ public class ForecastFragment extends Fragment {
             throw new RuntimeException(e);
         }
 
-        String[] forecastArray = {
+        String[] forecastData = {
                 "Today - Sunny - 88/63",
                 "Tomorrow - Foggy - 70/46",
                 "Wed - Cloudy - 72/63",
@@ -57,9 +86,13 @@ public class ForecastFragment extends Fragment {
                 "Sun - Sunny - 90/60"
         };
 
-        List<String> forecast = new ArrayList<>(Arrays.asList(forecastArray));
+        List<String> weekForecast = new ArrayList<>(Arrays.asList(forecastData));
 
-        ArrayAdapter<String> mForecastAdapter = new ArrayAdapter<>(getActivity(), R.layout.list_item_forecast, R.id.list_item_forecast_textview, forecast);
+        mForecastAdapter = new ArrayAdapter<>(
+                getActivity(),
+                R.layout.list_item_forecast,
+                R.id.list_item_forecast_textview,
+                weekForecast);
 
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
