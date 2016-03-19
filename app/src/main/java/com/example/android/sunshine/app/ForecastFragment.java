@@ -33,7 +33,7 @@ public class ForecastFragment extends Fragment {
     //Instance variables
     private String httpApiCall = "http://api.openweathermap.org/data/2.5/forecast/daily?zip=" + CITY_ZIP + "&mode=json&units=metric&cnt=" + Integer.toString(FORECAST_DAYS) + "&appid=" + API_KEY;
 
-    public URL url;
+    private URL url;
 
     public ForecastFragment() {
     }
