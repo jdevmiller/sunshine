@@ -112,6 +112,7 @@ public class ForecastFragment extends Fragment {
 
         private final String LOG_TAG = FetchWeatherTask.class.getSimpleName();
 
+
         @Override
         protected Void doInBackground(Void... params) {
 
@@ -156,6 +157,7 @@ public class ForecastFragment extends Fragment {
                     return null;
                 }
                 forecastJsonStr = buffer.toString();
+
             } catch (IOException e) {
                 Log.e(LOG_TAG, "Error ", e);
                 // If the code didn't successfully get the weather data, there's no point in attemping
