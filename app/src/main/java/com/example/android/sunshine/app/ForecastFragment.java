@@ -61,6 +61,8 @@ public class ForecastFragment extends Fragment {
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             case R.id.action_refresh:
+                FetchWeatherTask weatherTask = new FetchWeatherTask();
+                weatherTask.execute();
                 return true;
             case R.id.action_settings:
                 return true;
