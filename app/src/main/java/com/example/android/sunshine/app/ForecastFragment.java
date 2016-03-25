@@ -194,16 +194,15 @@ public class ForecastFragment extends Fragment {
 
         //builds URL based on settings given
         private String buildURL() {
-            //TODO add URI.builder code
             Uri.Builder uri = new Uri.Builder();
 
             uri.scheme(uriScheme);
             uri.authority(uriAuthority);
             for (String str : uriPath) {
-                uri.path(str);
+                uri.appendPath(str);
             }
-            for (int i = 0; i < uriParamatersQuery.length; i++) {
-                uri.appendQueryParameter(uriParamatersQuery[i][0], uriParamatersQuery[i][1]);
+            for (String[] str : uriParamatersQuery) {
+                uri.appendQueryParameter(str[0], str[1]);
             }
             uri.build();
 
