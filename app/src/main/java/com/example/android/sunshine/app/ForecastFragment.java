@@ -1,5 +1,6 @@
 package com.example.android.sunshine.app;
 
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -30,13 +31,28 @@ public class ForecastFragment extends Fragment {
 
     //Constants
     private static final String API_KEY = "f8efb0eb0af423c6bdc88e557ae434eb";
-    private static final String CITY_ZIP = "46506,us";
-    private static final int FORECAST_DAYS = 7;
+
 
     //Instance variables
     private ArrayAdapter<String> mForecastAdapter;
-    private String httpApiCall = "http://api.openweathermap.org/data/2.5/forecast/daily?zip=" + CITY_ZIP + "&mode=json&units=metric&cnt=" + Integer.toString(FORECAST_DAYS) + "&appid=" + API_KEY;
-    private URL url;
+    private String uriScheme = "http";
+    private String uriAuthority = "api.openweathermap.org";
+    private String[] uriPath = {
+            "data",
+            "2.5",
+            "forecast",
+            "daily"
+    };
+
+    private String[][] uriParamatersQuery = {
+            {"mode", "json"},
+            {"zip", "46506,us"},
+            {"cnt", "7"},
+            {"units", "metric"},
+            {"appid", API_KEY}
+    };
+
+
 
     public ForecastFragment() {
     }
@@ -63,6 +79,7 @@ public class ForecastFragment extends Fragment {
             case R.id.action_refresh:
                 FetchWeatherTask weatherTask = new FetchWeatherTask();
                 weatherTask.execute();
+                Log.d("URL", weatherTask.buildURL());
                 return true;
             case R.id.action_settings:
                 return true;
@@ -74,11 +91,7 @@ public class ForecastFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        try {
-            url = new URL(httpApiCall);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+
 
         String[] forecastData = {
                 "Today - Sunny - 88/63",
@@ -128,7 +141,7 @@ public class ForecastFragment extends Fragment {
                 // Construct the URL for the OpenWeatherMap query
                 // Possible parameters are avaiable at OWM's forecast API page, at
                 // http://openweathermap.org/API#forecast
-
+                URL url = new URL(buildURL());
 
                 // Create the request to OpenWeatherMap, and open the connection
                 urlConnection = (HttpURLConnection) url.openConnection();
@@ -176,6 +189,25 @@ public class ForecastFragment extends Fragment {
                 }
             }
             return null;
+        }
+
+
+        //builds URL based on settings given
+        private String buildURL() {
+            //TODO add URI.builder code
+            Uri.Builder uri = new Uri.Builder();
+
+            uri.scheme(uriScheme);
+            uri.authority(uriAuthority);
+            for (String str : uriPath) {
+                uri.path(str);
+            }
+            for (int i = 0; i < uriParamatersQuery.length; i++) {
+                uri.appendQueryParameter(uriParamatersQuery[i][0], uriParamatersQuery[i][1]);
+            }
+            uri.build();
+
+            return uri.toString();
         }
 
     }
